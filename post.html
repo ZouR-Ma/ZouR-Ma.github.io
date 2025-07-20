@@ -120,28 +120,24 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
     <script src="assets/js/config.js"></script>
     <script src="assets/js/app.js"></script>
+    <script src="assets/js/post.js"></script>
     <script>
-        // 等待app.js完全加载后再加载post.js
+        // 确保页面正确初始化
         window.addEventListener('load', () => {
-            // 确保app.js的函数都可用
-            if (typeof loadPostsIndex === 'function' && typeof getPostContent === 'function') {
-                const script = document.createElement('script');
-                script.src = 'assets/js/post.js';
-                document.body.appendChild(script);
-            } else {
-                console.error('app.js未正确加载');
-                // 显示错误信息
-                const postContent = document.getElementById('postContent');
-                if (postContent) {
-                    postContent.innerHTML = `
-                        <div style="text-align: center; padding: 3rem;">
-                            <h2 style="color: var(--text-secondary); margin-bottom: 1rem;">页面加载失败</h2>
-                            <p style="color: var(--text-secondary); margin-bottom: 1rem;">请刷新页面重试</p>
-                            <a href="index.html" style="color: var(--primary-color); text-decoration: none;">
-                                返回首页
-                            </a>
-                        </div>
-                    `;
+            console.log('post.html页面加载完成');
+            console.log('window.postsIndex:', window.postsIndex);
+            console.log('window.getPostById:', typeof window.getPostById);
+            console.log('window.getPostContent:', typeof window.getPostContent);
+            
+            // 如果postsIndex未加载，手动加载
+            if (!window.postsIndex || window.postsIndex.length === 0) {
+                console.log('postsIndex未加载，手动加载...');
+                if (typeof loadPostsIndex === 'function') {
+                    loadPostsIndex().then(() => {
+                        console.log('手动加载postsIndex完成:', window.postsIndex);
+                    }).catch(error => {
+                        console.error('手动加载postsIndex失败:', error);
+                    });
                 }
             }
         });

@@ -647,15 +647,19 @@ function getPostById(id) {
     return window.postsIndex.find(post => post.id === id);
 }
 
+// 将getPostById函数暴露到全局作用域，供post.js使用
+window.getPostById = getPostById;
+
 // 动态扫描posts目录并加载文章索引
 async function loadPostsIndex() {
     try {
         // 尝试加载文章索引文件
+        console.log('尝试加载文章索引文件...');
         const indexResponse = await fetch(`${POSTS_DIR}/index.json`);
         if (indexResponse.ok) {
             const indexData = await indexResponse.json();
             window.postsIndex = indexData.posts || [];
-            console.log(`从索引文件加载了 ${window.postsIndex.length} 篇文章`);
+            console.log(`从索引文件加载了 ${window.postsIndex.length} 篇文章:`, window.postsIndex.map(p => ({id: p.id, title: p.title})));
             return;
         }
         
@@ -711,7 +715,7 @@ async function scanPostsDirectory() {
         console.error('扫描posts目录失败:', error);
         // 如果扫描失败，使用默认文章
         window.postsIndex = [{
-            id: 'tencent-trpc-framework-rules',
+            id: 'trpc',
             title: '腾讯Trpc框架潜规则',
             date: '2025-07-01',
             tags: ['后端', 'Trpc', '腾讯', 'Go'],
@@ -779,8 +783,29 @@ async function extractPostInfo(filePath, fileName) {
         // 提取摘要（前200个字符）
         const excerpt = content.replace(/^#.*$/m, '').replace(/[#*`]/g, '').trim().substring(0, 200) + '...';
         
-        // 生成ID
-        const id = fileName.replace('.md', '').toLowerCase().replace(/[^a-z0-9]/g, '-');
+        // 生成ID - 使用更简单的逻辑，避免特殊字符问题
+        let id = fileName.replace('.md', '');
+        // 对于中文文件名，使用特殊处理
+        if (/[\u4e00-\u9fff]/.test(id)) {
+            // 如果是中文文件名，尝试从内容中提取英文标识
+            const titleMatch = content.match(/^#\s+(.+)$/m);
+            if (titleMatch) {
+                const title = titleMatch[1].trim();
+                // 提取英文部分作为ID
+                const englishMatch = title.match(/[a-zA-Z]+/);
+                if (englishMatch) {
+                    id = englishMatch[0].toLowerCase();
+                } else {
+                    // 如果没有英文，使用拼音或简化的中文
+                    id = 'post-' + Date.now();
+                }
+            } else {
+                id = 'post-' + Date.now();
+            }
+        } else {
+            // 英文文件名，转换为小写并替换特殊字符
+            id = id.toLowerCase().replace(/[^a-z0-9]/g, '-');
+        }
         
         return {
             id,
@@ -835,6 +860,9 @@ async function getPostContent(post) {
         return '文章内容不可用';
     }
 }
+
+// 将getPostContent函数暴露到全局作用域，供post.js使用
+window.getPostContent = getPostContent;
 
 // 更新页面meta信息
 function updatePageMeta() {
@@ -901,6 +929,28 @@ window.addEventListener('load', () => {
         hideLoading();
     }, 200);
 });
+
+// 为post.html页面提供初始化支持
+if (window.location.pathname.includes('post.html')) {
+    console.log('app.js: 检测到post.html页面，准备初始化...');
+    // 在post.html页面，确保postsIndex被加载
+    window.addEventListener('load', async () => {
+        try {
+            console.log('app.js: post.html页面load事件触发');
+            console.log('app.js: 当前postsIndex状态:', window.postsIndex);
+            
+            if (!window.postsIndex || window.postsIndex.length === 0) {
+                console.log('app.js: post.html页面：加载文章索引...');
+                await loadPostsIndex();
+                console.log('app.js: post.html页面：文章索引加载完成', window.postsIndex);
+            } else {
+                console.log('app.js: post.html页面：postsIndex已存在，无需重新加载');
+            }
+        } catch (error) {
+            console.error('app.js: post.html页面：加载文章索引失败', error);
+        }
+    });
+}
 
 // 添加错误处理，防止资源加载失败导致页面卡住
 window.addEventListener('error', (event) => {

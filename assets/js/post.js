@@ -17,6 +17,8 @@ async function initPostPage() {
     }
     
     console.log('查找文章ID:', currentPostId);
+    console.log('当前文章索引:', window.postsIndex);
+    
     const post = getPostById(currentPostId);
     
     if (!post) {
@@ -25,7 +27,7 @@ async function initPostPage() {
             const availableIds = window.postsIndex.map(p => p.id).join(', ');
             showError(`文章不存在。可用的文章ID: ${availableIds}`);
         } else {
-            showError('文章不存在，且文章索引未加载');
+            showError('文章不存在，且文章索引未加载。请刷新页面重试。');
         }
         return;
     }
@@ -35,7 +37,7 @@ async function initPostPage() {
     renderPostNavigation(currentPostId);
     renderRelatedPosts(post);
     renderTOC();
-    renderPostInfo(post);
+    await renderPostInfo(post);
     
     // 更新页面标题
     document.title = `${post.title} - ZouR-Ma 的博客`;
@@ -107,6 +109,10 @@ async function renderPost(post) {
                 <h2 style="color: var(--text-secondary);">加载失败</h2>
                 <p style="color: var(--text-secondary);">无法加载文章内容，请稍后重试。</p>
                 <p style="color: var(--text-secondary); font-size: 0.875rem;">错误信息: ${error.message}</p>
+                <p style="color: var(--text-secondary); font-size: 0.875rem;">文章路径: ${post.filePath}</p>
+                <a href="index.html" style="color: var(--primary-color); text-decoration: none; margin-top: 1rem; display: inline-block;">
+                    返回首页
+                </a>
             </div>
         `;
     }
@@ -245,7 +251,7 @@ function renderTOC() {
 }
 
 // 渲染文章信息
-function renderPostInfo(post) {
+async function renderPostInfo(post) {
     const postDate = document.getElementById('postDate');
     const readTime = document.getElementById('readTime');
     const postTags = document.getElementById('postTags');
@@ -255,7 +261,17 @@ function renderPostInfo(post) {
     }
     
     if (readTime) {
-        readTime.textContent = `${calculateReadTime(post.content)}分钟`;
+        // 如果post.content不存在，尝试从文件路径加载内容
+        let content = post.content;
+        if (!content && post.filePath && typeof window.getPostContent === 'function') {
+            try {
+                content = await window.getPostContent(post);
+            } catch (error) {
+                console.warn('无法获取文章内容用于计算阅读时间:', error);
+                content = '';
+            }
+        }
+        readTime.textContent = `${calculateReadTime(content || '')}分钟`;
     }
     
     if (postTags) {
@@ -344,11 +360,21 @@ function debounce(func, wait) {
 // 获取文章详情
 function getPostById(id) {
     // 从全局作用域获取postsIndex
-    if (typeof window.postsIndex !== 'undefined') {
-        return window.postsIndex.find(post => post.id === id);
+    if (typeof window.postsIndex !== 'undefined' && window.postsIndex.length > 0) {
+        const post = window.postsIndex.find(post => post.id === id);
+        if (post) {
+            console.log('找到文章:', post.title, 'ID:', post.id);
+            return post;
+        }
     }
     
-    // 如果postsIndex未定义，返回null
+    // 如果postsIndex未定义或为空，尝试从app.js的函数获取
+    if (typeof window.getPostById === 'function') {
+        return window.getPostById(id);
+    }
+    
+    console.error('未找到文章，ID:', id);
+    console.log('可用的文章:', window.postsIndex);
     return null;
 }
 
@@ -356,6 +382,8 @@ function getPostById(id) {
 async function initPostPageWithRetry() {
     try {
         console.log('开始初始化文章页面...');
+        console.log('当前URL:', window.location.href);
+        console.log('文章ID:', currentPostId);
         
         // 等待文章索引加载完成
         if (!window.postsIndex || window.postsIndex.length === 0) {
@@ -366,6 +394,7 @@ async function initPostPageWithRetry() {
                 
                 const checkIndex = () => {
                     attempts++;
+                    console.log(`检查文章索引 (${attempts}/${maxAttempts}):`, window.postsIndex);
                     if (window.postsIndex && window.postsIndex.length > 0) {
                         console.log('文章索引加载完成');
                         resolve();
@@ -380,7 +409,7 @@ async function initPostPageWithRetry() {
         }
         
         // 确保getPostContent函数可用
-        if (typeof getPostContent === 'undefined') {
+        if (typeof window.getPostContent === 'undefined') {
             throw new Error('getPostContent函数未定义，请确保app.js已正确加载');
         }
         
@@ -396,13 +425,14 @@ async function initPostPageWithRetry() {
 
 // 等待页面完全加载后再初始化
 function startInitialization() {
+    console.log('post.js: 开始初始化...');
+    console.log('post.js: 当前URL:', window.location.href);
+    console.log('post.js: 文章ID:', currentPostId);
+    console.log('post.js: postsIndex状态:', window.postsIndex);
+    
     // 延迟一点时间确保所有脚本都加载完成
     setTimeout(initPostPageWithRetry, 100);
 }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', startInitialization);
-} else {
-    // 如果DOM已经加载完成，延迟初始化
-    startInitialization();
-} 
+// 立即开始初始化，不等待DOMContentLoaded
+startInitialization(); 
