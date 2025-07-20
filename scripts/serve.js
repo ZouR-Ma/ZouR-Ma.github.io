@@ -30,7 +30,7 @@ const mimeTypes = {
 const server = http.createServer((req, res) => {
     // 解析URL
     const parsedUrl = url.parse(req.url);
-    let pathname = parsedUrl.pathname;
+    let pathname = decodeURIComponent(parsedUrl.pathname);
     
     // 默认页面
     if (pathname === '/') {

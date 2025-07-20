@@ -16,12 +16,21 @@ async function initPostPage() {
         return;
     }
     
+    console.log('查找文章ID:', currentPostId);
     const post = getPostById(currentPostId);
+    
     if (!post) {
-        showError('文章不存在');
+        console.error('未找到文章:', currentPostId);
+        if (window.postsIndex && window.postsIndex.length > 0) {
+            const availableIds = window.postsIndex.map(p => p.id).join(', ');
+            showError(`文章不存在。可用的文章ID: ${availableIds}`);
+        } else {
+            showError('文章不存在，且文章索引未加载');
+        }
         return;
     }
     
+    console.log('找到文章:', post.title);
     await renderPost(post);
     renderPostNavigation(currentPostId);
     renderRelatedPosts(post);
@@ -351,11 +360,17 @@ async function initPostPageWithRetry() {
         // 等待文章索引加载完成
         if (!window.postsIndex || window.postsIndex.length === 0) {
             console.log('等待文章索引加载...');
-            await new Promise(resolve => {
+            await new Promise((resolve, reject) => {
+                let attempts = 0;
+                const maxAttempts = 50; // 最多等待5秒
+                
                 const checkIndex = () => {
+                    attempts++;
                     if (window.postsIndex && window.postsIndex.length > 0) {
                         console.log('文章索引加载完成');
                         resolve();
+                    } else if (attempts >= maxAttempts) {
+                        reject(new Error('文章索引加载超时'));
                     } else {
                         setTimeout(checkIndex, 100);
                     }
@@ -375,14 +390,19 @@ async function initPostPageWithRetry() {
         
     } catch (error) {
         console.error('初始化文章页面失败:', error);
-        showError('页面初始化失败，请刷新页面重试');
+        showError(`页面初始化失败: ${error.message}`);
     }
 }
 
 // 等待页面完全加载后再初始化
+function startInitialization() {
+    // 延迟一点时间确保所有脚本都加载完成
+    setTimeout(initPostPageWithRetry, 100);
+}
+
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initPostPageWithRetry);
+    document.addEventListener('DOMContentLoaded', startInitialization);
 } else {
-    // 如果DOM已经加载完成，直接初始化
-    initPostPageWithRetry();
+    // 如果DOM已经加载完成，延迟初始化
+    startInitialization();
 } 

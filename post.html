@@ -123,9 +123,27 @@
     <script>
         // 等待app.js完全加载后再加载post.js
         window.addEventListener('load', () => {
-            const script = document.createElement('script');
-            script.src = 'assets/js/post.js';
-            document.body.appendChild(script);
+            // 确保app.js的函数都可用
+            if (typeof loadPostsIndex === 'function' && typeof getPostContent === 'function') {
+                const script = document.createElement('script');
+                script.src = 'assets/js/post.js';
+                document.body.appendChild(script);
+            } else {
+                console.error('app.js未正确加载');
+                // 显示错误信息
+                const postContent = document.getElementById('postContent');
+                if (postContent) {
+                    postContent.innerHTML = `
+                        <div style="text-align: center; padding: 3rem;">
+                            <h2 style="color: var(--text-secondary); margin-bottom: 1rem;">页面加载失败</h2>
+                            <p style="color: var(--text-secondary); margin-bottom: 1rem;">请刷新页面重试</p>
+                            <a href="index.html" style="color: var(--primary-color); text-decoration: none;">
+                                返回首页
+                            </a>
+                        </div>
+                    `;
+                }
+            }
         });
     </script>
 </body>
