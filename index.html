@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">ZouR-Ma 的博客</title>
+    <meta name="description" id="pageDescription" content="ZouR-Ma的个人博客，分享技术文章、学习心得和项目经验">
+    <meta name="keywords" content="博客,技术,前端,Web开发,JavaScript,CSS,HTML">
+    <meta name="author" content="ZouR-Ma">
+    <meta property="og:title" id="ogTitle" content="ZouR-Ma 的博客">
+    <meta property="og:description" id="ogDescription" content="ZouR-Ma的个人博客，分享技术文章、学习心得和项目经验">
+    <meta property="og:type" content="website">
+    <meta property="og:url" id="ogUrl" content="https://zour-ma.github.io">
+    <link rel="canonical" href="https://zour-ma.github.io">
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+    <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <h1><a href="index.html">ZouR-Ma</a></h1>
+                </div>
+                <nav class="nav">
+                    <ul>
+                        <li><a href="index.html" class="active">首页</a></li>
+                        <li><a href="archive.html">归档</a></li>
+                        <li><a href="#" id="themeToggle" aria-label="切换主题">
+                            <i class="fas fa-moon"></i>
+                        </a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- 主要内容 -->
+        <main class="main">
+            <div class="content">
+                <!-- 文章列表 -->
+                <div class="posts" id="postsContainer">
+                    <!-- 文章将通过JavaScript动态加载 -->
+                </div>
+
+                <!-- 分页 -->
+                <div class="pagination" id="pagination">
+                    <button class="pagination-btn prev" id="prevBtn" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                        上一页
+                    </button>
+                    <span class="pagination-info" id="paginationInfo">
+                        第 1 页，共 1 页
+                    </span>
+                    <button class="pagination-btn next" id="nextBtn" disabled>
+                        下一页
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 侧边栏 -->
+            <aside class="sidebar">
+                <!-- 个人信息 -->
+                <div class="profile">
+                    <div class="avatar">
+                        <img src="assets/images/avatar.svg" alt="头像" onerror="this.src='https://via.placeholder.com/100x100/3b82f6/ffffff?text=Z'">
+                    </div>
+                    <h3 class="name">ZouR-Ma</h3>
+                    <p class="bio">热爱技术，记录生活</p>
+                    <div class="social-links">
+                        <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" title="Email"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+
+                <!-- 搜索框 -->
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="搜索文章..." aria-label="搜索文章">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                </div>
+
+                <!-- 分类标签 -->
+                <div class="categories">
+                    <h3>分类</h3>
+                    <div class="tag-cloud" id="tagCloud">
+                        <!-- 标签将通过JavaScript动态生成 -->
+                    </div>
+                </div>
+
+                <!-- 最新文章 -->
+                <div class="recent-posts">
+                    <h3>最新文章</h3>
+                    <ul id="recentPostsList">
+                        <!-- 最新文章将通过JavaScript动态生成 -->
+                    </ul>
+                </div>
+            </aside>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2024 ZouR-Ma. All rights reserved.</p>
+                <p>Powered by <a href="https://github.com/ZouR-Ma/ZouR-Ma.github.io">ZouR-Ma Blog</a></p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- 加载动画 -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <span>加载中...</span>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/5.1.1/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面未找到 - ZouR-Ma 的博客</title>
+    <meta name="description" content="抱歉，您访问的页面不存在">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .error-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .error-content {
+            max-width: 500px;
+        }
+        
+        .error-code {
+            font-size: 6rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            line-height: 1;
+        }
+        
+        .error-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+        
+        .error-message {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .error-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+        }
+        
+        .error-btn:hover {
+            background-color: var(--primary-hover);
+        }
+        
+        .error-btn.secondary {
+            background-color: var(--code-bg);
+            color: var(--text-color);
+        }
+        
+        .error-btn.secondary:hover {
+            background-color: var(--border-color);
+        }
+        
+        @media (max-width: 480px) {
+            .error-code {
+                font-size: 4rem;
+            }
+            
+            .error-title {
+                font-size: 1.5rem;
+            }
+            
+            .error-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <h1><a href="index.html">ZouR-Ma</a></h1>
+                </div>
+                <nav class="nav">
+                    <ul>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="archive.html">归档</a></li>
+                        <li><a href="#" id="themeToggle" aria-label="切换主题">
+                            <i class="fas fa-moon"></i>
+                        </a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- 错误内容 -->
+        <main class="error-container">
+            <div class="error-content">
+                <div class="error-code">404</div>
+                <h1 class="error-title">页面未找到</h1>
+                <p class="error-message">
+                    抱歉，您访问的页面不存在或已被移动。<br>
+                    请检查URL是否正确，或返回首页继续浏览。
+                </p>
+                <div class="error-actions">
+                    <a href="index.html" class="error-btn">
+                        <i class="fas fa-home"></i>
+                        返回首页
+                    </a>
+                    <a href="archive.html" class="error-btn secondary">
+                        <i class="fas fa-archive"></i>
+                        浏览归档
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2024 ZouR-Ma. All rights reserved.</p>
+                <p>Powered by <a href="https://github.com/ZouR-Ma/ZouR-Ma.github.io">ZouR-Ma Blog</a></p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // 主题切换功能
+        let currentTheme = localStorage.getItem('theme') || 'light';
+        
+        function setTheme(theme) {
+            currentTheme = theme;
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            
+            const icon = document.querySelector('#themeToggle i');
+            if (icon) {
+                icon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+            }
+        }
+        
+        function toggleTheme() {
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            setTheme(newTheme);
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            setTheme(currentTheme);
+            
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', toggleTheme);
+            }
+        });
+    </script>
+</body>
+</html> 
