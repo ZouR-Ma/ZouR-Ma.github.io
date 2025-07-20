@@ -1,276 +1,14 @@
-// 博客文章数据
-window.posts = [
-    {
-        id: 'how-to-make-blog-website',
-        title: '如何制作个人博客网站',
-        date: '2024-02-28',
-        tags: ['前端', '博客', '教程'],
-        excerpt: '详细介绍了如何从零开始制作一个现代化的个人博客网站，包括技术选型、设计思路和实现步骤。',
-        content: `# 如何制作个人博客网站
+// 文章索引数据 - 动态加载
+window.postsIndex = [];
 
-## 前言
+// 文章目录结构
+const POSTS_DIR = 'content/posts';
 
-在数字化时代，拥有一个个人博客网站是展示自己、分享知识和建立个人品牌的重要方式。本文将详细介绍如何从零开始制作一个现代化的个人博客网站。
-
-## 技术选型
-
-### 前端技术栈
-- **HTML5** - 语义化标记
-- **CSS3** - 现代化样式
-- **JavaScript ES6+** - 交互功能
-- **Markdown** - 内容编写
-
-### 部署平台
-- **GitHub Pages** - 免费静态网站托管
-- **Netlify** - 现代化部署平台
-- **Vercel** - 快速部署服务
-
-## 设计思路
-
-### 用户体验
-- 简洁清晰的界面设计
-- 响应式布局，适配各种设备
-- 快速加载，优化性能
-- 易于导航和搜索
-
-### 功能特性
-- 文章列表和详情页
-- 分类和标签系统
-- 搜索功能
-- 归档页面
-- 深色/浅色主题切换
-
-## 实现步骤
-
-### 1. 项目结构
-\`\`\`
-blog-website/
-├── index.html          # 首页
-├── archive.html        # 归档页
-├── css/
-│   └── style.css       # 样式文件
-├── js/
-│   └── app.js          # 应用逻辑
-├── posts/              # 文章目录
-└── images/             # 图片资源
-\`\`\`
-
-### 2. 创建基础页面
-首先创建HTML结构，包括头部导航、主要内容区域和侧边栏。
-
-### 3. 样式设计
-使用CSS3实现现代化的设计风格，包括：
-- 卡片式布局
-- 渐变和阴影效果
-- 平滑动画过渡
-- 响应式设计
-
-### 4. 功能实现
-使用JavaScript实现交互功能：
-- 文章数据管理
-- 搜索和过滤
-- 主题切换
-- 分页功能
-
-## 部署上线
-
-### GitHub Pages
-1. 创建GitHub仓库
-2. 上传项目文件
-3. 启用GitHub Pages
-4. 配置自定义域名（可选）
-
-### 性能优化
-- 压缩CSS和JavaScript文件
-- 优化图片大小
-- 启用浏览器缓存
-- 使用CDN加速
-
-## 总结
-
-制作个人博客网站是一个很好的学习项目，既能提升技术能力，又能建立个人品牌。通过合理的技术选型和设计思路，可以创建一个既美观又实用的博客网站。
-
-记住，好的博客网站不仅要有漂亮的外观，更要有优质的内容和良好的用户体验。`
-    },
-    {
-        id: 'modern-web-development',
-        title: '现代Web开发技术趋势',
-        date: '2024-02-25',
-        tags: ['Web开发', '技术趋势', '前端'],
-        excerpt: '探讨2024年Web开发领域的最新技术趋势，包括框架、工具和最佳实践。',
-        content: `# 现代Web开发技术趋势
-
-## 概述
-
-Web开发技术日新月异，本文将探讨2024年最受关注的技术趋势和发展方向。
-
-## 前端框架
-
-### React 18
-- 并发特性
-- 自动批处理
-- Suspense for Data Fetching
-
-### Vue 3
-- Composition API
-- 更好的TypeScript支持
-- 性能优化
-
-### Svelte
-- 编译时框架
-- 更小的包体积
-- 更好的性能
-
-## 构建工具
-
-### Vite
-- 极快的开发服务器
-- 优化的构建输出
-- 丰富的插件生态
-
-### Turbopack
-- Rust编写的构建工具
-- 更快的构建速度
-- 与Webpack兼容
-
-## 全栈开发
-
-### Next.js 14
-- App Router
-- Server Components
-- 更好的性能
-
-### Nuxt 3
-- Vue 3支持
-- 自动导入
-- 更好的开发体验
-
-## 总结
-
-选择合适的技术栈需要根据项目需求和团队能力来决定。`
-    },
-    {
-        id: 'css-grid-layout',
-        title: 'CSS Grid布局完全指南',
-        date: '2024-02-20',
-        tags: ['CSS', '布局', '前端'],
-        excerpt: '深入讲解CSS Grid布局系统，从基础概念到高级应用，包含大量实用示例。',
-        content: `# CSS Grid布局完全指南
-
-## 什么是CSS Grid
-
-CSS Grid是一个强大的布局系统，可以创建二维的网格布局。
-
-## 基础概念
-
-### Grid Container
-\`\`\`css
-.grid-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 100px 100px;
-    gap: 20px;
-}
-\`\`\`
-
-### Grid Items
-网格容器内的直接子元素自动成为网格项目。
-
-## 高级特性
-
-### 命名网格线
-\`\`\`css
-.grid {
-    grid-template-columns: [start] 1fr [middle] 1fr [end];
-    grid-template-rows: [top] 100px [bottom];
-}
-\`\`\`
-
-### 网格区域
-\`\`\`css
-.grid {
-    grid-template-areas: 
-        "header header"
-        "sidebar main"
-        "footer footer";
-}
-\`\`\`
-
-## 实用示例
-
-### 响应式布局
-\`\`\`css
-.responsive-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-}
-\`\`\`
-
-## 总结
-
-CSS Grid是现代Web布局的强大工具，掌握它可以创建复杂的响应式布局。`
-    },
-    {
-        id: 'javascript-es6-features',
-        title: 'JavaScript ES6+ 核心特性详解',
-        date: '2024-02-15',
-        tags: ['JavaScript', 'ES6', '编程'],
-        excerpt: '详细介绍JavaScript ES6及后续版本的核心特性，包括箭头函数、解构赋值、Promise等。',
-        content: `# JavaScript ES6+ 核心特性详解
-
-## 箭头函数
-
-### 基本语法
-\`\`\`javascript
-// 传统函数
-function add(a, b) {
-    return a + b;
-}
-
-// 箭头函数
-const add = (a, b) => a + b;
-\`\`\`
-
-### 特点
-- 更简洁的语法
-- 自动绑定this
-- 不能用作构造函数
-
-## 解构赋值
-
-### 数组解构
-\`\`\`javascript
-const [a, b, c] = [1, 2, 3];
-console.log(a, b, c); // 1 2 3
-\`\`\`
-
-### 对象解构
-\`\`\`javascript
-const { name, age } = { name: 'John', age: 30 };
-console.log(name, age); // John 30
-\`\`\`
-
-## Promise和异步
-
-### 基本用法
-\`\`\`javascript
-const fetchData = () => {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve('数据加载完成');
-        }, 1000);
-    });
+// 分页配置
+const PAGINATION_CONFIG = {
+    postsPerPage: 10,
+    maxPages: 10 // 最多显示10页
 };
-
-fetchData().then(data => console.log(data));
-\`\`\`
-
-## 总结
-
-ES6+为JavaScript带来了许多强大的特性，大大提升了开发效率和代码可读性。`
-    }
-];
 
 // 检查外部资源加载状态
 function checkExternalResources() {
@@ -316,16 +54,16 @@ function checkExternalResources() {
 
 // 应用状态
 let currentPage = 1;
-let postsPerPage = window.CONFIG?.pagination?.postsPerPage || 5;
+let postsPerPage = PAGINATION_CONFIG.postsPerPage;
 let currentTheme = localStorage.getItem(window.CONFIG?.theme?.storageKey || 'theme') || window.CONFIG?.theme?.default || 'light';
 let filteredPosts = [];
+let isLoading = false;
+let hasMorePosts = true;
 
 // DOM 元素
 const elements = {
     postsContainer: document.getElementById('postsContainer'),
     pagination: document.getElementById('pagination'),
-    prevBtn: document.getElementById('prevBtn'),
-    nextBtn: document.getElementById('nextBtn'),
     paginationInfo: document.getElementById('paginationInfo'),
     searchInput: document.getElementById('searchInput'),
     themeToggle: document.getElementById('themeToggle'),
@@ -345,9 +83,12 @@ async function initApp() {
         // 检查外部资源加载状态（不阻塞页面加载）
         await checkExternalResources();
         
-        // 确保posts数据已加载
-        if (!window.posts || window.posts.length === 0) {
-            throw new Error('文章数据未加载');
+        // 动态加载文章索引
+        await loadPostsIndex();
+        
+        // 确保postsIndex数据已加载
+        if (!window.postsIndex || window.postsIndex.length === 0) {
+            throw new Error('文章索引数据未加载');
         }
         
         // 检查必要的DOM元素是否存在（根据页面类型）
@@ -404,13 +145,7 @@ function setupEventListeners() {
         elements.searchInput.addEventListener('input', debounce(handleSearch, window.CONFIG?.search?.debounceTime || 300));
     }
     
-    // 分页按钮
-    if (elements.prevBtn) {
-        elements.prevBtn.addEventListener('click', () => changePage(currentPage - 1));
-    }
-    if (elements.nextBtn) {
-        elements.nextBtn.addEventListener('click', () => changePage(currentPage + 1));
-    }
+    // 分页按钮事件在renderPagination中动态添加
     
     // 键盘快捷键
     document.addEventListener('keydown', handleKeyboard);
@@ -419,8 +154,13 @@ function setupEventListeners() {
 // 初始化首页
 function initHomePage() {
     // 初始化filteredPosts
-    filteredPosts = [...window.posts];
-    renderPosts();
+    filteredPosts = [...window.postsIndex];
+    
+    // 按日期排序，最新的在前
+    filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    // 加载第一页
+    loadPage(1);
     renderPagination();
     renderTagCloud();
     renderRecentPosts();
@@ -433,19 +173,56 @@ function initArchivePage() {
     renderCategoryStats();
 }
 
+// 加载指定页面的文章
+async function loadPage(page) {
+    if (isLoading || page < 1) return;
+    
+    isLoading = true;
+    currentPage = page;
+    
+    try {
+        // 显示加载状态
+        if (page === 1) {
+            showLoading();
+        } else {
+            showPageLoading();
+        }
+        
+        // 计算当前页的文章
+        const startIndex = (page - 1) * postsPerPage;
+        const endIndex = startIndex + postsPerPage;
+        const pagePosts = filteredPosts.slice(startIndex, endIndex);
+        
+        // 渲染文章列表
+        await renderPosts(pagePosts, page === 1);
+        
+        // 更新分页信息
+        renderPagination();
+        
+        // 滚动到顶部（如果是第一页）
+        if (page === 1) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+    } catch (error) {
+        console.error('加载页面失败:', error);
+        showError('加载页面失败，请重试');
+    } finally {
+        isLoading = false;
+        hideLoading();
+        hidePageLoading();
+    }
+}
+
 // 渲染文章列表
-function renderPosts() {
+async function renderPosts(pagePosts, isFirstPage = false) {
     if (!elements.postsContainer) return;
     
     // 数据验证
-    if (!Array.isArray(filteredPosts)) {
-        console.error('filteredPosts不是数组');
-        filteredPosts = [...window.posts];
+    if (!Array.isArray(pagePosts)) {
+        console.error('pagePosts不是数组');
+        return;
     }
-    
-    const startIndex = (currentPage - 1) * postsPerPage;
-    const endIndex = startIndex + postsPerPage;
-    const pagePosts = filteredPosts.slice(startIndex, endIndex);
     
     const postsHTML = pagePosts.map(post => `
         <article class="post-card">
@@ -474,7 +251,11 @@ function renderPosts() {
         </article>
     `).join('');
     
-    elements.postsContainer.innerHTML = postsHTML;
+    if (isFirstPage) {
+        elements.postsContainer.innerHTML = postsHTML;
+    } else {
+        elements.postsContainer.innerHTML += postsHTML;
+    }
     
     // 添加标签点击事件
     elements.postsContainer.querySelectorAll('.post-tag').forEach(tag => {
@@ -490,13 +271,94 @@ function renderPagination() {
     if (!elements.pagination) return;
     
     const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+    const maxDisplayPages = Math.min(totalPages, PAGINATION_CONFIG.maxPages);
     
-    elements.prevBtn.disabled = currentPage <= 1;
-    elements.nextBtn.disabled = currentPage >= totalPages;
-    
+    // 更新分页信息
     if (elements.paginationInfo) {
         elements.paginationInfo.textContent = `第 ${currentPage} 页，共 ${totalPages} 页`;
     }
+    
+    // 生成分页按钮
+    const paginationHTML = generatePaginationButtons(currentPage, totalPages, maxDisplayPages);
+    if (elements.pagination) {
+        elements.pagination.innerHTML = paginationHTML;
+    }
+    
+    // 添加分页按钮事件
+    addPaginationEvents();
+}
+
+// 生成分页按钮
+function generatePaginationButtons(currentPage, totalPages, maxDisplayPages) {
+    if (totalPages <= 1) return '';
+    
+    let buttons = '';
+    
+    // 上一页按钮
+    buttons += `
+        <button class="pagination-btn prev-btn" ${currentPage <= 1 ? 'disabled' : ''}>
+            <i class="fas fa-chevron-left"></i> 上一页
+        </button>
+    `;
+    
+    // 页码按钮
+    const startPage = Math.max(1, currentPage - Math.floor(maxDisplayPages / 2));
+    const endPage = Math.min(totalPages, startPage + maxDisplayPages - 1);
+    
+    for (let i = startPage; i <= endPage; i++) {
+        buttons += `
+            <button class="pagination-btn page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">
+                ${i}
+            </button>
+        `;
+    }
+    
+    // 下一页按钮
+    buttons += `
+        <button class="pagination-btn next-btn" ${currentPage >= totalPages ? 'disabled' : ''}>
+            下一页 <i class="fas fa-chevron-right"></i>
+        </button>
+    `;
+    
+    return buttons;
+}
+
+// 添加分页事件
+function addPaginationEvents() {
+    const pagination = elements.pagination;
+    if (!pagination) return;
+    
+    // 上一页
+    const prevBtn = pagination.querySelector('.prev-btn');
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                loadPage(currentPage - 1);
+            }
+        });
+    }
+    
+    // 下一页
+    const nextBtn = pagination.querySelector('.next-btn');
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+            if (currentPage < totalPages) {
+                loadPage(currentPage + 1);
+            }
+        });
+    }
+    
+    // 页码按钮
+    const pageBtns = pagination.querySelectorAll('.page-btn');
+    pageBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const page = parseInt(btn.dataset.page);
+            if (page !== currentPage) {
+                loadPage(page);
+            }
+        });
+    });
 }
 
 // 渲染标签云
@@ -523,7 +385,7 @@ function renderTagCloud() {
 function renderRecentPosts() {
     if (!elements.recentPostsList) return;
     
-    const recentPosts = window.posts.slice(0, window.CONFIG?.pagination?.postsPerPage || 5);
+    const recentPosts = window.postsIndex.slice(0, 5);
     const recentHTML = recentPosts.map(post => `
         <li>
             <a href="post.html?id=${post.id}">${post.title}</a>
@@ -539,7 +401,7 @@ function renderArchive() {
     if (!elements.archiveList) return;
     
     // 使用过滤后的文章或所有文章
-    const postsToRender = filteredPosts.length > 0 ? filteredPosts : window.posts;
+    const postsToRender = filteredPosts.length > 0 ? filteredPosts : window.postsIndex;
     const groupedPosts = groupPostsByYear(postsToRender);
     
     if (Object.keys(groupedPosts).length === 0) {
@@ -574,7 +436,7 @@ function renderYearStats() {
     if (!elements.yearStats) return;
     
     // 使用过滤后的文章或所有文章
-    const postsToRender = filteredPosts.length > 0 ? filteredPosts : window.posts;
+    const postsToRender = filteredPosts.length > 0 ? filteredPosts : window.postsIndex;
     const yearStats = getYearStats(postsToRender);
     const statsHTML = Object.keys(yearStats).sort((a, b) => b - a).map(year => `
         <div class="stat-item">
@@ -591,7 +453,7 @@ function renderCategoryStats() {
     if (!elements.categoryStats) return;
     
     // 使用过滤后的文章或所有文章
-    const postsToRender = filteredPosts.length > 0 ? filteredPosts : window.posts;
+    const postsToRender = filteredPosts.length > 0 ? filteredPosts : window.postsIndex;
     const categoryStats = getCategoryStats(postsToRender);
     const statsHTML = Object.keys(categoryStats).map(category => `
         <div class="stat-item">
@@ -615,13 +477,13 @@ function formatDate(dateString) {
 
 function getAllTags() {
     const tagSet = new Set();
-    window.posts.forEach(post => {
+    window.postsIndex.forEach(post => {
         post.tags.forEach(tag => tagSet.add(tag));
     });
     return Array.from(tagSet);
 }
 
-function groupPostsByYear(posts = window.posts) {
+function groupPostsByYear(posts = window.postsIndex) {
     const grouped = {};
     posts.forEach(post => {
         const year = new Date(post.date).getFullYear();
@@ -633,7 +495,7 @@ function groupPostsByYear(posts = window.posts) {
     return grouped;
 }
 
-function getYearStats(posts = window.posts) {
+function getYearStats(posts = window.postsIndex) {
     const stats = {};
     posts.forEach(post => {
         const year = new Date(post.date).getFullYear();
@@ -642,7 +504,7 @@ function getYearStats(posts = window.posts) {
     return stats;
 }
 
-function getCategoryStats(posts = window.posts) {
+function getCategoryStats(posts = window.postsIndex) {
     const stats = {};
     posts.forEach(post => {
         post.tags.forEach(tag => {
@@ -657,14 +519,17 @@ function handleSearch() {
     const query = elements.searchInput.value.trim().toLowerCase();
     
     if (!query) {
-        filteredPosts = [...window.posts];
+        filteredPosts = [...window.postsIndex];
     } else {
-        filteredPosts = window.posts.filter(post => 
+        filteredPosts = window.postsIndex.filter(post => 
             post.title.toLowerCase().includes(query) ||
             post.excerpt.toLowerCase().includes(query) ||
             post.tags.some(tag => tag.toLowerCase().includes(query))
         );
     }
+    
+    // 按日期排序，最新的在前
+    filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
     
     currentPage = 1;
     
@@ -674,20 +539,21 @@ function handleSearch() {
         renderYearStats();
         renderCategoryStats();
     } else {
-        renderPosts();
-        renderPagination();
+        loadPage(1);
     }
 }
 
 // 按标签过滤
 function filterByTag(tag) {
-    filteredPosts = window.posts.filter(post => 
+    filteredPosts = window.postsIndex.filter(post => 
         post.tags.includes(tag)
     );
     
+    // 按日期排序，最新的在前
+    filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
     currentPage = 1;
-    renderPosts();
-    renderPagination();
+    loadPage(1);
     
     // 更新搜索框
     if (elements.searchInput) {
@@ -695,19 +561,7 @@ function filterByTag(tag) {
     }
 }
 
-// 分页处理
-function changePage(page) {
-    const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
-    
-    if (page >= 1 && page <= totalPages) {
-        currentPage = page;
-        renderPosts();
-        renderPagination();
-        
-        // 滚动到顶部
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-}
+
 
 // 主题切换
 function toggleTheme() {
@@ -753,6 +607,28 @@ function hideLoading() {
     elements.loadingOverlay?.classList.remove('show');
 }
 
+// 显示页面加载状态
+function showPageLoading() {
+    if (elements.postsContainer) {
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'page-loading';
+        loadingDiv.innerHTML = `
+            <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                <i class="fas fa-spinner fa-spin"></i> 加载中...
+            </div>
+        `;
+        elements.postsContainer.appendChild(loadingDiv);
+    }
+}
+
+// 隐藏页面加载状态
+function hidePageLoading() {
+    const loadingDiv = elements.postsContainer?.querySelector('.page-loading');
+    if (loadingDiv) {
+        loadingDiv.remove();
+    }
+}
+
 // 防抖函数
 function debounce(func, wait) {
     let timeout;
@@ -769,6 +645,195 @@ function debounce(func, wait) {
 // 获取文章详情
 function getPostById(id) {
     return window.posts.find(post => post.id === id);
+}
+
+// 动态扫描posts目录并加载文章索引
+async function loadPostsIndex() {
+    try {
+        // 尝试加载文章索引文件
+        const indexResponse = await fetch(`${POSTS_DIR}/index.json`);
+        if (indexResponse.ok) {
+            const indexData = await indexResponse.json();
+            window.postsIndex = indexData.posts || [];
+            console.log(`从索引文件加载了 ${window.postsIndex.length} 篇文章`);
+            return;
+        }
+        
+        // 如果索引文件不存在，尝试扫描目录
+        console.log('索引文件不存在，尝试扫描posts目录...');
+        await scanPostsDirectory();
+        
+    } catch (error) {
+        console.error('加载文章索引失败:', error);
+        // 如果扫描失败，尝试扫描目录作为备用方案
+        await scanPostsDirectory();
+    }
+}
+
+// 扫描posts目录结构
+async function scanPostsDirectory() {
+    try {
+        // 尝试获取目录列表
+        const response = await fetch(`${POSTS_DIR}/`);
+        if (!response.ok) {
+            throw new Error('无法访问posts目录');
+        }
+        
+        const html = await response.text();
+        const posts = [];
+        
+        // 解析HTML中的目录链接
+        const linkRegex = /<a href="([^"]+)">([^<]+)<\/a>/g;
+        let match;
+        
+        while ((match = linkRegex.exec(html)) !== null) {
+            const href = match[1];
+            const name = match[2];
+            
+            // 跳过父目录和当前目录
+            if (href === '../' || href === './' || name === 'Parent Directory') {
+                continue;
+            }
+            
+            // 检查是否是年份目录（如2025_07）
+            if (href.endsWith('/') && /^\d{4}_\d{2}/.test(name)) {
+                await scanYearDirectory(name, posts);
+            }
+        }
+        
+        // 按日期排序，最新的在前
+        posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        window.postsIndex = posts;
+        console.log(`扫描到 ${posts.length} 篇文章`);
+        
+    } catch (error) {
+        console.error('扫描posts目录失败:', error);
+        // 如果扫描失败，使用默认文章
+        window.postsIndex = [{
+            id: 'tencent-trpc-framework-rules',
+            title: '腾讯Trpc框架潜规则',
+            date: '2025-07-01',
+            tags: ['后端', 'Trpc', '腾讯', 'Go'],
+            excerpt: '记录腾讯Trpc框架使用中的常见潜规则和默认配置，基于Trpc-go框架的实践经验总结。',
+            filePath: 'content/posts/2025_07/腾讯Trpc框架潜规则.md'
+        }];
+    }
+}
+
+// 扫描年份目录
+async function scanYearDirectory(yearDir, posts) {
+    try {
+        const response = await fetch(`${POSTS_DIR}/${yearDir}/`);
+        if (!response.ok) return;
+        
+        const html = await response.text();
+        const linkRegex = /<a href="([^"]+)">([^<]+)<\/a>/g;
+        let match;
+        
+        while ((match = linkRegex.exec(html)) !== null) {
+            const href = match[1];
+            const name = match[2];
+            
+            // 跳过父目录和当前目录
+            if (href === '../' || href === './' || name === 'Parent Directory') {
+                continue;
+            }
+            
+            // 检查是否是markdown文件
+            if (name.endsWith('.md')) {
+                const filePath = `${POSTS_DIR}/${yearDir}/${name}`;
+                const postInfo = await extractPostInfo(filePath, name);
+                if (postInfo) {
+                    posts.push(postInfo);
+                }
+            }
+        }
+        
+    } catch (error) {
+        console.error(`扫描目录 ${yearDir} 失败:`, error);
+    }
+}
+
+// 从markdown文件中提取文章信息
+async function extractPostInfo(filePath, fileName) {
+    try {
+        const content = await loadMarkdownContent(filePath);
+        
+        // 提取标题（第一个#开头的行）
+        const titleMatch = content.match(/^#\s+(.+)$/m);
+        const title = titleMatch ? titleMatch[1].trim() : fileName.replace('.md', '');
+        
+        // 提取日期（从文件路径或内容中）
+        const dateMatch = content.match(/date:\s*(\d{4}-\d{2}-\d{2})/i) || 
+                         content.match(/日期:\s*(\d{4}-\d{2}-\d{2})/i);
+        const date = dateMatch ? dateMatch[1] : extractDateFromPath(filePath);
+        
+        // 提取标签
+        const tagsMatch = content.match(/tags:\s*\[([^\]]+)\]/i) || 
+                         content.match(/标签:\s*\[([^\]]+)\]/i);
+        const tags = tagsMatch ? 
+            tagsMatch[1].split(',').map(tag => tag.trim().replace(/['"]/g, '')) : 
+            ['未分类'];
+        
+        // 提取摘要（前200个字符）
+        const excerpt = content.replace(/^#.*$/m, '').replace(/[#*`]/g, '').trim().substring(0, 200) + '...';
+        
+        // 生成ID
+        const id = fileName.replace('.md', '').toLowerCase().replace(/[^a-z0-9]/g, '-');
+        
+        return {
+            id,
+            title,
+            date,
+            tags,
+            excerpt,
+            filePath
+        };
+        
+    } catch (error) {
+        console.error(`提取文章信息失败 ${filePath}:`, error);
+        return null;
+    }
+}
+
+// 从文件路径中提取日期
+function extractDateFromPath(filePath) {
+    const pathMatch = filePath.match(/(\d{4})_(\d{2})/);
+    if (pathMatch) {
+        return `${pathMatch[1]}-${pathMatch[2]}-01`;
+    }
+    return new Date().toISOString().split('T')[0];
+}
+
+// 动态加载markdown文件内容
+async function loadMarkdownContent(filePath) {
+    try {
+        const response = await fetch(filePath);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const content = await response.text();
+        return content;
+    } catch (error) {
+        console.error('加载markdown文件失败:', error);
+        return `# 加载失败
+
+无法加载文章内容，请检查文件路径是否正确。
+
+错误信息: ${error.message}`;
+    }
+}
+
+// 获取文章内容（支持动态加载）
+async function getPostContent(post) {
+    if (post.content) {
+        return post.content;
+    } else if (post.filePath) {
+        return await loadMarkdownContent(post.filePath);
+    } else {
+        return '文章内容不可用';
+    }
 }
 
 // 更新页面meta信息

@@ -1,0 +1,16 @@
+{
+  "name": "zour-ma-blog",
+  "version": "1.0.0",
+  "description": "ZouR-Ma的个人博客网站",
+  "main": "index.html",
+  "scripts": {
+    "generate-index": "node scripts/generate-index.js",
+    "dev": "node scripts/serve.js",
+    "serve": "node scripts/serve.js"
+  },
+  "keywords": ["blog", "personal", "markdown"],
+  "author": "ZouR-Ma",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {}
+} 

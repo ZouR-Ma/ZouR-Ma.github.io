@@ -10,7 +10,7 @@ function getUrlParameter(name) {
 const currentPostId = getUrlParameter('id');
 
 // 初始化文章页面
-function initPostPage() {
+async function initPostPage() {
     if (!currentPostId) {
         showError('文章ID不存在');
         return;
@@ -22,7 +22,7 @@ function initPostPage() {
         return;
     }
     
-    renderPost(post);
+    await renderPost(post);
     renderPostNavigation(currentPostId);
     renderRelatedPosts(post);
     renderTOC();
@@ -33,57 +33,79 @@ function initPostPage() {
 }
 
 // 渲染文章内容
-function renderPost(post) {
+async function renderPost(post) {
     const postContent = document.getElementById('postContent');
     if (!postContent) return;
     
-    // 设置Marked配置
-    marked.setOptions({
-        highlight: function(code, lang) {
-            if (lang && hljs.getLanguage(lang)) {
-                try {
-                    return hljs.highlight(code, { language: lang }).value;
-                } catch (err) {
-                    console.warn('代码高亮失败:', err);
-                }
-            }
-            return hljs.highlightAuto(code).value;
-        },
-        breaks: true,
-        gfm: true
-    });
-    
-    const postHTML = `
-        <header class="post-header">
-            <h1 class="post-title">${post.title}</h1>
-            <div class="post-meta">
-                <span><i class="fas fa-calendar"></i>${formatDate(post.date)}</span>
-                <span><i class="fas fa-tags"></i>${post.tags.join(', ')}</span>
-                <span><i class="fas fa-clock"></i>${calculateReadTime(post.content)}分钟阅读</span>
-            </div>
-            <div class="post-tags">
-                ${post.tags.map(tag => `
-                    <a href="index.html?tag=${encodeURIComponent(tag)}" class="post-tag">${tag}</a>
-                `).join('')}
-            </div>
-        </header>
-        <div class="post-content">
-            ${marked.parse(post.content)}
+    // 显示加载状态
+    postContent.innerHTML = `
+        <div style="text-align: center; padding: 2rem;">
+            <div style="color: var(--text-secondary);">正在加载文章内容...</div>
         </div>
     `;
     
-    postContent.innerHTML = postHTML;
-    
-    // 重新初始化代码高亮
-    hljs.highlightAll();
-    
-    // 添加标题ID用于目录导航
-    addHeadingIds();
+    try {
+        // 获取文章内容（支持动态加载）
+        const content = await getPostContent(post);
+        
+        // 设置Marked配置
+        marked.setOptions({
+            highlight: function(code, lang) {
+                if (lang && hljs.getLanguage(lang)) {
+                    try {
+                        return hljs.highlight(code, { language: lang }).value;
+                    } catch (err) {
+                        console.warn('代码高亮失败:', err);
+                    }
+                }
+                return hljs.highlightAuto(code).value;
+            },
+            breaks: true,
+            gfm: true
+        });
+        
+        const postHTML = `
+            <header class="post-header">
+                <h1 class="post-title">${post.title}</h1>
+                <div class="post-meta">
+                    <span><i class="fas fa-calendar"></i>${formatDate(post.date)}</span>
+                    <span><i class="fas fa-tags"></i>${post.tags.join(', ')}</span>
+                    <span><i class="fas fa-clock"></i>${calculateReadTime(content)}分钟阅读</span>
+                </div>
+                <div class="post-tags">
+                    ${post.tags.map(tag => `
+                        <a href="index.html?tag=${encodeURIComponent(tag)}" class="post-tag">${tag}</a>
+                    `).join('')}
+                </div>
+            </header>
+            <div class="post-content">
+                ${marked.parse(content)}
+            </div>
+        `;
+        
+        postContent.innerHTML = postHTML;
+        
+        // 重新初始化代码高亮
+        hljs.highlightAll();
+        
+        // 添加标题ID用于目录导航
+        addHeadingIds();
+        
+    } catch (error) {
+        console.error('渲染文章失败:', error);
+        postContent.innerHTML = `
+            <div style="text-align: center; padding: 2rem;">
+                <h2 style="color: var(--text-secondary);">加载失败</h2>
+                <p style="color: var(--text-secondary);">无法加载文章内容，请稍后重试。</p>
+                <p style="color: var(--text-secondary); font-size: 0.875rem;">错误信息: ${error.message}</p>
+            </div>
+        `;
+    }
 }
 
 // 渲染文章导航
 function renderPostNavigation(currentId) {
-    const posts = window.posts || [];
+    const posts = window.postsIndex || [];
     const currentIndex = posts.findIndex(post => post.id === currentId);
     const prevPost = currentIndex > 0 ? posts[currentIndex - 1] : null;
     const nextPost = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
@@ -131,7 +153,7 @@ function renderRelatedPosts(currentPost) {
     const relatedPostsContainer = document.getElementById('relatedPosts');
     if (!relatedPostsContainer) return;
     
-    const posts = window.posts || [];
+    const posts = window.postsIndex || [];
     
     // 根据标签找到相关文章
     const relatedPosts = posts
@@ -312,166 +334,23 @@ function debounce(func, wait) {
 
 // 获取文章详情
 function getPostById(id) {
-    // 尝试从全局作用域获取posts
-    if (typeof window.posts !== 'undefined') {
-        return window.posts.find(post => post.id === id);
+    // 从全局作用域获取postsIndex
+    if (typeof window.postsIndex !== 'undefined') {
+        return window.postsIndex.find(post => post.id === id);
     }
     
-    // 备用方案：重新定义posts数据
-    const postsData = [
-        {
-            id: 'how-to-make-blog-website',
-            title: '如何制作个人博客网站',
-            date: '2024-02-28',
-            tags: ['前端', '博客', '教程'],
-            excerpt: '详细介绍了如何从零开始制作一个现代化的个人博客网站，包括技术选型、设计思路和实现步骤。',
-            content: `# 如何制作个人博客网站
-
-## 前言
-
-在数字化时代，拥有一个个人博客网站是展示自己、分享知识和建立个人品牌的重要方式。本文将详细介绍如何从零开始制作一个现代化的个人博客网站。
-
-## 技术选型
-
-### 前端技术栈
-- **HTML5** - 语义化标记
-- **CSS3** - 现代化样式
-- **JavaScript ES6+** - 交互功能
-- **Markdown** - 内容编写
-
-### 部署平台
-- **GitHub Pages** - 免费静态网站托管
-- **Netlify** - 现代化部署平台
-- **Vercel** - 快速部署服务
-
-## 设计思路
-
-### 用户体验
-- 简洁清晰的界面设计
-- 响应式布局，适配各种设备
-- 快速加载，优化性能
-- 易于导航和搜索
-
-### 功能特性
-- 文章列表和详情页
-- 分类和标签系统
-- 搜索功能
-- 归档页面
-- 深色/浅色主题切换
-
-## 实现步骤
-
-### 1. 项目结构
-\`\`\`
-blog-website/
-├── index.html          # 首页
-├── archive.html        # 归档页
-├── css/
-│   └── style.css       # 样式文件
-├── js/
-│   └── app.js          # 应用逻辑
-├── posts/              # 文章目录
-└── images/             # 图片资源
-\`\`\`
-
-### 2. 创建基础页面
-首先创建HTML结构，包括头部导航、主要内容区域和侧边栏。
-
-### 3. 样式设计
-使用CSS3实现现代化的设计风格，包括：
-- 卡片式布局
-- 渐变和阴影效果
-- 平滑动画过渡
-- 响应式设计
-
-### 4. 功能实现
-使用JavaScript实现交互功能：
-- 文章数据管理
-- 搜索和过滤
-- 主题切换
-- 分页功能
-
-## 部署上线
-
-### GitHub Pages
-1. 创建GitHub仓库
-2. 上传项目文件
-3. 启用GitHub Pages
-4. 配置自定义域名（可选）
-
-### 性能优化
-- 压缩CSS和JavaScript文件
-- 优化图片大小
-- 启用浏览器缓存
-- 使用CDN加速
-
-## 总结
-
-制作个人博客网站是一个很好的学习项目，既能提升技术能力，又能建立个人品牌。通过合理的技术选型和设计思路，可以创建一个既美观又实用的博客网站。
-
-记住，好的博客网站不仅要有漂亮的外观，更要有优质的内容和良好的用户体验。`
-        },
-        {
-            id: 'modern-web-development',
-            title: '现代Web开发技术趋势',
-            date: '2024-02-25',
-            tags: ['Web开发', '技术趋势', '前端'],
-            excerpt: '探讨2024年Web开发领域的最新技术趋势，包括框架、工具和最佳实践。',
-            content: `# 现代Web开发技术趋势
-
-## 概述
-
-Web开发技术日新月异，本文将探讨2024年最受关注的技术趋势和发展方向。
-
-## 前端框架
-
-### React 18
-- 并发特性
-- 自动批处理
-- Suspense for Data Fetching
-
-### Vue 3
-- Composition API
-- 更好的TypeScript支持
-- 性能优化
-
-### Svelte
-- 编译时框架
-- 更小的包体积
-- 更好的性能
-
-## 构建工具
-
-### Vite
-- 极快的开发服务器
-- 优化的构建输出
-- 丰富的插件生态
-
-### Turbopack
-- Rust编写的构建工具
-- 更快的构建速度
-- 与Webpack兼容
-
-## 全栈开发
-
-### Next.js 14
-- App Router
-- Server Components
-- 更好的性能
-
-### Nuxt 3
-- Vue 3支持
-- 自动导入
-- 更好的开发体验
-
-## 总结
-
-选择合适的技术栈需要根据项目需求和团队能力来决定。`
-        }
-    ];
-    
-    return postsData.find(post => post.id === id);
+    // 如果postsIndex未定义，返回null
+    return null;
 }
 
 // 初始化页面
-document.addEventListener('DOMContentLoaded', initPostPage); 
+document.addEventListener('DOMContentLoaded', () => {
+    // 确保app.js已加载并且getPostContent函数可用
+    if (typeof getPostContent === 'undefined') {
+        console.error('getPostContent函数未定义，请确保app.js已正确加载');
+        showError('页面初始化失败，请刷新页面重试');
+        return;
+    }
+    
+    initPostPage();
+}); 

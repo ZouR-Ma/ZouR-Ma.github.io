@@ -75,26 +75,20 @@ Vercel 会自动检测静态网站，无需特殊配置。
 
 ## 🔧 本地开发
 
-### 1. 使用 Python 内置服务器
+### 1. 使用项目脚本（推荐）
 
 ```bash
-# Python 3
-python -m http.server 8000
-
-# Python 2
-python -m SimpleHTTPServer 8000
+# 使用项目提供的脚本
+npm run dev
 ```
 
 然后在浏览器中访问 `http://localhost:8000`
 
-### 2. 使用 Node.js
+### 2. 使用自定义Node.js服务器
 
 ```bash
-# 安装 http-server
-npm install -g http-server
-
-# 启动服务器
-http-server -p 8000
+# 使用项目提供的服务器脚本
+node scripts/serve.js
 ```
 
 ### 3. 使用 PHP

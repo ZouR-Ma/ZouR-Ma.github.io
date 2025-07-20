@@ -1,0 +1,31 @@
+{
+  "posts": [
+    {
+      "id": "trpc",
+      "title": "腾讯Trpc框架潜规则",
+      "date": "2025-07-01",
+      "tags": [
+        "后端",
+        "Trpc",
+        "腾讯",
+        "Go"
+      ],
+      "excerpt": "date: 2025-07-01\ntags: [后端, Trpc, 腾讯, Go]\n\n最近工作中用到了腾讯的trpc框架，发现网上教程相对较少，而且Trpc的官方文档相对简单，所以变有了下面的内容用于，记录一些常见并默认的点（俗称：潜规则）。\n以下文档均根据Trpc-go框架进行讨论，如有错误，请指正，保持开放心态。持续更新...\n\n如果你第一次接触Trpc，请你根据官网文档实践一遍，再看本文章可...",
+      "filePath": "content/posts/2025_07/腾讯Trpc框架潜规则.md"
+    },
+    {
+      "id": "test-article",
+      "title": "JavaScript动态索引系统测试",
+      "date": "2025-01-15",
+      "tags": [
+        "前端",
+        "JavaScript",
+        "测试"
+      ],
+      "excerpt": "date: 2025-01-15\ntags: [前端, JavaScript, 测试]\n\n这是一篇测试文章，用于验证动态索引系统是否正常工作。\n\n 功能测试\n\n 1. 标题提取\n- 应该正确提取文章标题\n- 支持中文标题\n\n 2. 日期提取\n- 从元数据中提取日期\n- 格式：YYYY-MM-DD\n\n 3. 标签提取\n- 支持多个标签\n- 支持中文标签\n\n 4. 摘要生成\n- 自动生成文章摘要\n- ...",
+      "filePath": "content/posts/2025_01/test-article.md"
+    }
+  ],
+  "lastUpdated": "2025-07-20T15:07:36.509Z",
+  "totalPosts": 2
+}
