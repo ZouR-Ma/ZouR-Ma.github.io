@@ -644,7 +644,7 @@ function debounce(func, wait) {
 
 // 获取文章详情
 function getPostById(id) {
-    return window.posts.find(post => post.id === id);
+    return window.postsIndex.find(post => post.id === id);
 }
 
 // 动态扫描posts目录并加载文章索引

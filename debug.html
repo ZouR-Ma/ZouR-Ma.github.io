@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>调试页面</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .debug-info { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .error { background: #ffebee; color: #c62828; }
+        .success { background: #e8f5e8; color: #2e7d32; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>文章加载调试页面</h1>
+    
+    <div class="debug-info">
+        <h3>当前URL参数</h3>
+        <div id="urlInfo"></div>
+    </div>
+    
+    <div class="debug-info">
+        <h3>文章索引状态</h3>
+        <div id="indexInfo"></div>
+    </div>
+    
+    <div class="debug-info">
+        <h3>文章详情</h3>
+        <div id="postInfo"></div>
+    </div>
+    
+    <div class="debug-info">
+        <h3>控制台日志</h3>
+        <div id="consoleLog"></div>
+    </div>
+    
+    <div>
+        <button onclick="testLoadIndex()">测试加载索引</button>
+        <button onclick="testLoadPost()">测试加载文章</button>
+        <button onclick="clearLog()">清除日志</button>
+    </div>
+
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script>
+        // 重写console.log来捕获日志
+        const originalLog = console.log;
+        const originalError = console.error;
+        const logContainer = document.getElementById('consoleLog');
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            logContainer.innerHTML += `<div style="color: #2e7d32;">[LOG] ${args.join(' ')}</div>`;
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            logContainer.innerHTML += `<div style="color: #c62828;">[ERROR] ${args.join(' ')}</div>`;
+        };
+        
+        // 显示URL参数
+        function showUrlInfo() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            document.getElementById('urlInfo').innerHTML = `
+                <p><strong>文章ID:</strong> ${id || '未提供'}</p>
+                <p><strong>完整URL:</strong> ${window.location.href}</p>
+            `;
+        }
+        
+        // 显示索引状态
+        function showIndexInfo() {
+            const info = document.getElementById('indexInfo');
+            if (window.postsIndex) {
+                info.innerHTML = `
+                    <div class="success">
+                        <p><strong>索引已加载</strong></p>
+                        <p>文章数量: ${window.postsIndex.length}</p>
+                        <p>文章列表:</p>
+                        <ul>
+                            ${window.postsIndex.map(post => `
+                                <li>ID: ${post.id}, 标题: ${post.title}</li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+            } else {
+                info.innerHTML = '<div class="error">索引未加载</div>';
+            }
+        }
+        
+        // 显示文章详情
+        function showPostInfo() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            const info = document.getElementById('postInfo');
+            
+            if (!id) {
+                info.innerHTML = '<div class="error">未提供文章ID</div>';
+                return;
+            }
+            
+            if (!window.postsIndex) {
+                info.innerHTML = '<div class="error">文章索引未加载</div>';
+                return;
+            }
+            
+            const post = window.postsIndex.find(p => p.id === id);
+            if (post) {
+                info.innerHTML = `
+                    <div class="success">
+                        <p><strong>找到文章:</strong></p>
+                        <p>ID: ${post.id}</p>
+                        <p>标题: ${post.title}</p>
+                        <p>日期: ${post.date}</p>
+                        <p>标签: ${post.tags.join(', ')}</p>
+                        <p>文件路径: ${post.filePath}</p>
+                    </div>
+                `;
+            } else {
+                info.innerHTML = `
+                    <div class="error">
+                        <p>未找到ID为 "${id}" 的文章</p>
+                        <p>可用的文章ID: ${window.postsIndex.map(p => p.id).join(', ')}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // 测试加载索引
+        async function testLoadIndex() {
+            console.log('开始测试加载索引...');
+            try {
+                await loadPostsIndex();
+                showIndexInfo();
+                showPostInfo();
+                console.log('索引加载测试完成');
+            } catch (error) {
+                console.error('索引加载测试失败:', error);
+            }
+        }
+        
+        // 测试加载文章
+        async function testLoadPost() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            
+            if (!id) {
+                console.error('未提供文章ID');
+                return;
+            }
+            
+            console.log('开始测试加载文章:', id);
+            try {
+                const post = getPostById(id);
+                if (post) {
+                    console.log('找到文章:', post);
+                    const content = await getPostContent(post);
+                    console.log('文章内容长度:', content.length);
+                    console.log('文章内容前100字符:', content.substring(0, 100));
+                } else {
+                    console.error('未找到文章:', id);
+                }
+            } catch (error) {
+                console.error('文章加载测试失败:', error);
+            }
+        }
+        
+        // 清除日志
+        function clearLog() {
+            logContainer.innerHTML = '';
+        }
+        
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', async () => {
+            showUrlInfo();
+            showIndexInfo();
+            showPostInfo();
+            
+            // 自动加载索引
+            await testLoadIndex();
+        });
+    </script>
+</body>
+</html> 

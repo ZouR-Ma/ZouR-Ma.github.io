@@ -120,6 +120,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
     <script src="assets/js/config.js"></script>
     <script src="assets/js/app.js"></script>
-    <script src="assets/js/post.js"></script>
+    <script>
+        // 等待app.js完全加载后再加载post.js
+        window.addEventListener('load', () => {
+            const script = document.createElement('script');
+            script.src = 'assets/js/post.js';
+            document.body.appendChild(script);
+        });
+    </script>
 </body>
 </html> 

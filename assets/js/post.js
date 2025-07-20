@@ -344,13 +344,45 @@ function getPostById(id) {
 }
 
 // 初始化页面
-document.addEventListener('DOMContentLoaded', () => {
-    // 确保app.js已加载并且getPostContent函数可用
-    if (typeof getPostContent === 'undefined') {
-        console.error('getPostContent函数未定义，请确保app.js已正确加载');
+async function initPostPageWithRetry() {
+    try {
+        console.log('开始初始化文章页面...');
+        
+        // 等待文章索引加载完成
+        if (!window.postsIndex || window.postsIndex.length === 0) {
+            console.log('等待文章索引加载...');
+            await new Promise(resolve => {
+                const checkIndex = () => {
+                    if (window.postsIndex && window.postsIndex.length > 0) {
+                        console.log('文章索引加载完成');
+                        resolve();
+                    } else {
+                        setTimeout(checkIndex, 100);
+                    }
+                };
+                checkIndex();
+            });
+        }
+        
+        // 确保getPostContent函数可用
+        if (typeof getPostContent === 'undefined') {
+            throw new Error('getPostContent函数未定义，请确保app.js已正确加载');
+        }
+        
+        console.log('开始初始化文章页面...');
+        await initPostPage();
+        console.log('文章页面初始化完成');
+        
+    } catch (error) {
+        console.error('初始化文章页面失败:', error);
         showError('页面初始化失败，请刷新页面重试');
-        return;
     }
-    
-    initPostPage();
-}); 
+}
+
+// 等待页面完全加载后再初始化
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPostPageWithRetry);
+} else {
+    // 如果DOM已经加载完成，直接初始化
+    initPostPageWithRetry();
+} 
